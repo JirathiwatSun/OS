@@ -1,73 +1,83 @@
 public class TestBank {
     public static void main(String[] args) {
-        System.out.println("=== PART 1: STACK POINTER ANALYSIS ===");
-        // [Pg 4] Requirement: "Create multiple BankAccount objects"
-        BankAccount acc1 = new BankAccount("John", 1000.0);
-        
-        // [Pg 3] Requirement: "Trace call stack" (deposit -> validate -> updateBalance)
-        acc1.deposit(500.0);
+        System.out.println("====== MIDTERM PROJECT PART 1 ======");
 
-        // [Pg 3] Requirement: "Cause StackOverflowError"
-        // Uncomment the line below to test the crash (Required for discussion)
+        // --- PART 1: STACK POINTER ANALYSIS ---
+        System.out.println("\n[1] Testing Stack Trace (Nested Calls)");
+        BankAccount acc1 = new BankAccount("John", 1000.0);
+        acc1.deposit(500.0); // This triggers deposit -> validate -> updateBalance
+
+        // UNCOMMENT the line below to prove the StackOverflowError requirement
+        // System.out.println("Causing Crash...");
         // acc1.causeStackOverflow(); 
 
-        System.out.println("\n=== PART 2: HEAP ALLOCATOR & GC ===");
-        // [Pg 4] Requirement: "Create multiple objects... Show allocation"
+        
+        // --- PART 2: HEAP ALLOCATOR & GARBAGE COLLECTION ---
+        System.out.println("\n[2] Testing Heap & Garbage Collection");
+        // Creating multiple objects in Heap
         BankAccount acc2 = new BankAccount("Alice", 2000.0);
         BankAccount acc3 = new BankAccount("Bob", 500.0);
+        
+        System.out.println("Before Reassignment:");
+        System.out.println("acc2 is Alice, acc3 is Bob");
 
-        // [Pg 4] Requirement: "Demonstrate what happens when references are reassigned"
-        System.out.println("Before reassignment: acc2 is Alice");
-        System.out.println("Alice's balance: " + acc2.getBalance());
+        // "Demonstrate what happens when references are reassigned"
         acc2 = acc3; 
-        System.out.println("After reassignment (acc2 = acc3): acc2 is now Bob");
-
-        // [Pg 4] Requirement: "Trigger garbage collection... by nullifying references"
+        System.out.println("After Reassignment (acc2 = acc3):");
+        System.out.println("acc2 now points to Bob's data (Balance: " + acc2.getBalance() + ")");
+        
+        // "Trigger garbage collection by nullifying references"
         acc3 = null; 
-        // Now the original "Alice" object has no reference pointing to it -> Eligible for GC.
-        // The "Bob" object is still pointed to by acc2.
-        System.gc(); // Suggest GC to run (demonstration purposes)
+        // NOTE: Bob is still safe (acc2 points to him). Alice is lost (no one points to her).
+        // Alice's memory is now eligible for Garbage Collection.
+        System.gc(); 
+        System.out.println("Garbage Collection suggested (Alice's object is unreachable).");
 
-        System.out.println("\n=== PART 3: REFERENCE VS PRIMITIVE EXPERT ===");
-        double primitiveBalance = 500.0;
-        System.out.println("Primitive before: " + primitiveBalance);
-        modifyPrimitive(primitiveBalance);
-        System.out.println("Primitive after: " + primitiveBalance + " (No Change)");
 
-        System.out.println("Object Balance before: " + acc1.getBalance());
+        // --- PART 3: PRIMITIVE VS REFERENCE ---
+        System.out.println("\n[3] Testing Primitive vs Reference");
+        double primitiveVal = 500.0;
+        
+        System.out.println("Primitive before method: " + primitiveVal);
+        modifyPrimitive(primitiveVal);
+        System.out.println("Primitive after method: " + primitiveVal + " (Unchanged - Pass by Value)");
+
+        System.out.println("Object Balance before method: " + acc1.getBalance());
         modifyReference(acc1);
-        System.out.println("Object Balance after: " + acc1.getBalance() + " (Changed!)");
+        System.out.println("Object Balance after method: " + acc1.getBalance() + " (Changed - Pass by Reference)");
 
-        System.out.println("\n=== PART 4: STRING IMMUTABILITY ===");
-        // [Pg 6] Requirement: Show String immutability
+
+        // --- PART 4: STRING IMMUTABILITY ---
+        System.out.println("\n[4] Testing String Immutability & Optimization");
         String s1 = "Customer";
-        String s2 = s1; 
-        s1 = s1 + " (VIP)"; // Creates NEW object in Heap, s2 still points to old "Customer"
-        System.out.println("s1: " + s1); // Customer (VIP)
-        System.out.println("s2: " + s2); // Customer
-
-        // [Pg 6] Optimization requirement
+        String s2 = s1;
+        
+        // Modifying s1 creates a NEW object. s2 still points to the OLD object.
+        s1 = s1 + " (VIP)"; 
+        
+        System.out.println("s1: " + s1 + " (New Object created)");
+        System.out.println("s2: " + s2 + " (Still points to old Object)");
+        
+        // Efficient way using StringBuilder (from BankAccount class)
         acc1.printStatementEfficiently();
 
-        System.out.println("\n=== PART 5: SCHEDULING CONCEPTS ===");
-        // [Pg 8] Requirement: "Implement some scheduling concepts"
+
+        // --- PART 5: SCHEDULING ---
+        System.out.println("\n[5] Testing Scheduling Concepts");
+        // This will run in the background while main() finishes
         acc1.scheduleInterestTask();
         
-        // Wait for scheduled task to complete before program exits
-        try {
-            Thread.sleep(2000); // Wait 2 seconds for the scheduled task
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println(">> Main Method functionality complete.");
+        System.out.println(">> (Notice the program keeps running until the Scheduler finishes...)");
     }
 
-    // [Pg 5] Helper for Primitive vs Reference
+    // Helper method for Primitive testing
     public static void modifyPrimitive(double val) {
-        val = val + 1000.0; // Only modifies the copy on the Stack
+        val = val + 1000.0; // Changes copy only
     }
 
-    // [Pg 5] Helper for Primitive vs Reference
+    // Helper method for Reference testing
     public static void modifyReference(BankAccount acc) {
-        acc.withdraw(100.0); // Modifies the actual Object on the Heap
+        acc.withdraw(100.0); // Changes actual object
     }
 }
