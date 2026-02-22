@@ -1,92 +1,87 @@
-import java.util.Timer;
-import java.util.TimerTask;
+public class BankAccount implements BankService {
 
-public class BankAccount {
-    // [Requirement: Heap Allocator] Fields stored in Heap
-    private String name; 
-    private double balance;
+    // ================= HEAP =================
+    private Customer owner;       // Reference stored in HEAP
+    private double balance;       // Primitive inside HEAP object
+    private int recursionDepth = 0;
 
-    // Constructor
-    public BankAccount(String name, double initialBalance) {
-        this.name = name;
+    public BankAccount(Customer owner, double initialBalance) {
+        this.owner = owner;
         this.balance = initialBalance;
     }
 
-    // [Requirement: Basic Functionality]
+    @Override
     public double getBalance() {
-        return balance;
+        return balance;  // Returned to STACK
     }
 
-    // [Requirement: Basic Functionality]
-    public void withdraw(double amount) {
-        if (amount > 0 && amount <= balance) {
-            balance -= amount;
-            System.out.println(name + " withdrew: " + amount);
-        } else {
-            System.out.println("Insufficient funds or invalid amount.");
-        }
-    }
-
-    // [Requirement: Stack Pointer Analysis] 
-    // "Create multiple nested method calls (deposit -> validate -> updateBalance)"
+    @Override
     public void deposit(double amount) {
+
         if (amount > 0) {
-            System.out.println("\n--- Stack Trace Start ---");
-            System.out.println("1. Method deposit() called [Stack Frame 1]");
+
+            System.out.println("\n[STACK] deposit() called");
             balance += amount;
-            validate(); // Nested Call
+
+            validate("Deposit", amount);  // Nested call
         }
     }
 
-    // Nested Method 1
-    private void validate() {
-        System.out.println("2. Method validate() called [Stack Frame 2]");
-        updateBalance(); // Nested Call
+    @Override
+    public void withdraw(double amount) {
+
+        if (amount > 0 && amount <= balance) {
+
+            System.out.println("\n[STACK] withdraw() called");
+            balance -= amount;
+
+            validate("Withdraw", amount); // Nested call
+        } else {
+            System.out.println("Insufficient balance.");
+        }
     }
 
-    // Nested Method 2
-    private void updateBalance() {
-        System.out.println("3. Method updateBalance() called [Stack Frame 3]");
-        System.out.println("   (Data updated. Stack unwinding begins now...)");
-        System.out.println("--- Stack Trace End ---\n");
+    // Required by UML
+    public void validate() {
+        System.out.println("[STACK] validate() called");
     }
 
-    // [Requirement: Stack Overflow]
-    // "Cause a StackOverflowError by creating excessive recursive calls"
-    public void causeStackOverflow() {
-        // Recursive call without an exit condition
-        causeStackOverflow(); 
+    private void validate(String type, double amount) {
+
+        recursionDepth++;
+        System.out.println("[STACK] validate(type, amount) called");
+
+        if (balance >= 0) {
+            updateBalance(type, amount);
+        }
+
+        recursionDepth--;  // Simulate stack unwinding
     }
 
-    // [Requirement: Scheduling Concepts]
-    // "MUST implement some scheduling concepts for a particular purpose"
-    public void scheduleInterestTask() {
-        Timer timer = new Timer();
-        System.out.println(">> [Scheduler] Background task started. Waiting 3 seconds to add interest...");
-
-        // Schedule a task to run after 3000ms (3 seconds)
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                double interest = balance * 0.05; // 5% interest
-                balance += interest;
-                System.out.println("\n>> [Scheduler ALERT] 3 Seconds passed!");
-                System.out.println(">> Interest of " + interest + " added.");
-                System.out.println(">> New Balance for " + name + ": " + balance);
-                timer.cancel(); // Stop the timer thread
-            }
-        }, 3000);
+    // Required by UML
+    public void updateBalance() {
+        System.out.println("[STACK] updateBalance() called");
     }
 
-    // [Requirement: String Optimization]
-    // "Use StringBuilder instead of + concatenation for better memory efficiency"
-    public void printStatementEfficiently() {
+    private void updateBalance(String type, double amount) {
+
+        System.out.println("[STACK] updateBalance(type, amount) called");
+
+        if (recursionDepth > 10) {
+            System.out.println("Warning: Deep stack level detected!");
+        }
+
         StringBuilder sb = new StringBuilder();
-        // Efficient memory usage (One object modified, rather than creating new Strings)
-        sb.append("Account Report: ").append(name)
-          .append(" | Balance: $").append(balance)
-          .append(" | Status: Active");
-        
+
+        sb.append("Owner: ").append(owner.getName())
+          .append("\nTransaction: ").append(type)
+          .append("\nAmount: ").append(amount)
+          .append("\nNew Balance: ").append(balance)
+          .append("\nCurrent Stack Depth: ").append(recursionDepth)
+          .append("\n----------------------------");
+
         System.out.println(sb.toString());
+
+        owner.processTransaction(amount, type);
     }
 }
