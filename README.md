@@ -27,3 +27,18 @@
 
 > **⚠️ Note on Project Scope:**
 > If your overall system design is too large for a 2-week development cycle, **please reduce the scope**. You do NOT need to complete all parts of your system design. Simply focus on building the main core components that allow you to effectively demonstrate and explain the 3 assigned tasks.
+---
+
+### 📋 What/How to Submit:
+
+1. **File Format:** The report can be done using a word processing application and then saved as **.PDF** to submit.
+2. **Cover Page Title:** Put the project Title **"Banking System"** on the cover page.
+3. **Cover Page Info:** Put your team members' information (ID, First Name, Last Name, Nick Name/Short Name, and what job they do) on the cover page.
+4. **Class Diagram:** Inside the report, the class diagram starts from the "interface" until the modules/classes you designed to implement.
+5. **Source Code:** Put all the Java codes (in text format with a well-readable design, copy-paste ready to run on my machine). 
+6. **Unit #5 Tasks:** Explain/Discuss the 3 Tasks assigned in the Lecture Note of Unit #5.
+7. **Memory Visualization:** Each stack/heap call tracing can be in a visualization/image/infographic.
+8. **Scheduling Concepts:** Explain any parts of your code that applied the scheduling concepts to optimize your "Banking System" performance running on a platform (OS + environment).
+9. **Concurrency Concepts:** Explain any parts of your code that applied the concurrency concept to optimize your "Banking System" performance running on a platform (OS + environment).
+
+---
