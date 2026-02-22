@@ -78,8 +78,22 @@ public class TestBank {
         scheduler.startInterestTimer(acc1);
 
 
+        // ================= HEAP REFERENCE REASSIGNMENT =================
         System.out.println("=================================");
-        System.out.println("TASK 9: PRIMITIVE VS REFERENCE DEMO");
+        System.out.println("TASK 9: HEAP REFERENCE REASSIGNMENT");
+        System.out.println("Reassigning acc1 to a new SavingsAccount object.");
+        System.out.println("Old object becomes unreachable and eligible for GC.");
+        System.out.println("=================================\n");
+
+        SavingsAccount acc2 = new SavingsAccount(c1, 3000);
+        acc1 = acc2; // old SavingsAccount object now eligible for GC
+        System.gc();
+
+        System.out.println("Old object now eligible for Garbage Collection.");
+
+
+        System.out.println("=================================");
+        System.out.println("TASK 10: PRIMITIVE VS REFERENCE DEMO");
         System.out.println("Primitive will NOT change original value.");
         System.out.println("Object reference WILL modify HEAP object.");
         System.out.println("=================================\n");
@@ -92,7 +106,7 @@ public class TestBank {
 
 
         System.out.println("=================================");
-        System.out.println("TASK 10: STACK OVERFLOW (NOT EXECUTED)");
+        System.out.println("TASK 11: STACK OVERFLOW (NOT EXECUTED)");
         System.out.println("If testStackOverflow() is called,");
         System.out.println("it will cause infinite recursion and StackOverflowError.");
         System.out.println("=================================\n");
@@ -100,12 +114,16 @@ public class TestBank {
         // testStackOverflow(); // DO NOT RUN
     }
 
+
+    // ================= PRIMITIVE VS REFERENCE =================
     public static void primitiveVsReferenceTest(double val, BankAccount ref) {
 
         val += 1000;       // Primitive → STACK copy only
         ref.deposit(1000); // Reference → modifies HEAP object
     }
 
+
+    // ================= STACK OVERFLOW DEMO =================
     public static void testStackOverflow() {
         testStackOverflow(); // Infinite recursion
     }
