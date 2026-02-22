@@ -6,7 +6,7 @@
 ---
 
 ### 🔗 Report Working Document
-* **Link:** [ITCS225_Principles of Operating Systems_Report.docx](https://studentmahidolac-my.sharepoint.com/:w:/g/personal/jirathiwat_sun_student_mahidol_ac_th/IQDcoHgnUbmDRaAfFkPoq3rXAdF6s9ykyqafJy3A-PCu1qo?e=rDaHe1](https://studentmahidolac-my.sharepoint.com/:w:/g/personal/jirathiwat_sun_student_mahidol_ac_th/IQDcoHgnUbmDRaAfFkPoq3rXAQrEiWEie7Wd9tKY8QHLqmk?e=iawVeG)
+* **Link:** [ITCS225_Principles of Operating Systems_Report.docx]([https://studentmahidolac-my.sharepoint.com/:w:/g/personal/jirathiwat_sun_student_mahidol_ac_th/IQDcoHgnUbmDRaAfFkPoq3rXAdF6s9ykyqafJy3A-PCu1qo?e=rDaHe1](https://studentmahidolac-my.sharepoint.com/:w:/g/personal/jirathiwat_sun_student_mahidol_ac_th/IQDcoHgnUbmDRaAfFkPoq3rXAQrEiWEie7Wd9tKY8QHLqmk?e=iawVeG])
 
 ### 📌 General Guidelines & Format
 * **File Type:** Complete your report in a word processing application and export it to submit as a **.PDF** file.
