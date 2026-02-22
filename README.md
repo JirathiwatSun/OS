@@ -5,6 +5,9 @@
 
 ---
 
+### 🔗 Report Working Document
+* **Link:** [ITCS225_Principles of Operating Systems_Report.docx](https://studentmahidolac-my.sharepoint.com/:w:/g/personal/jirathiwat_sun_student_mahidol_ac_th/IQDcoHgnUbmDRaAfFkPoq3rXAdF6s9ykyqafJy3A-PCu1qo?e=rDaHe1)
+
 ### 📌 General Guidelines & Format
 * **File Type:** Complete your report in a word processing application and export it to submit as a **.PDF** file.
 * **Cover Page Title:** Explicitly state the project title as **"Banking System"**.
