@@ -18,7 +18,7 @@ public class ModernBankGUI extends JFrame {
         comboTransferTarget = new JComboBox<>();
 
         setTitle("Customer Portal - Modern Bank");
-        setSize(800, 800); // Increased window size
+        setSize(800, 800); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(new Color(244, 246, 249));
@@ -29,7 +29,7 @@ public class ModernBankGUI extends JFrame {
 
         add(createHeaderPanel(), BorderLayout.NORTH);
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 16)); // Bigger Tab Font
+        tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
         tabbedPane.addTab("🏦 Operations", createOperationsTab());
         tabbedPane.addTab("💸 Transfer Money", createTransferTab());
         tabbedPane.addTab("📝 Open Account", createNewAccountTab());
@@ -90,7 +90,7 @@ public class ModernBankGUI extends JFrame {
 
         lblBalance = new JLabel();
         lblBalance.setForeground(Color.WHITE);
-        lblBalance.setFont(new Font("Segoe UI", Font.BOLD, 55)); // Huge Balance
+        lblBalance.setFont(new Font("Segoe UI", Font.BOLD, 55)); 
         lblBalance.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(lblBalance, BorderLayout.CENTER);
         return panel;
@@ -100,7 +100,7 @@ public class ModernBankGUI extends JFrame {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(new Color(244, 246, 249));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15); // Increased padding
+        gbc.insets = new Insets(15, 15, 15, 15); 
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel lblAmount = new JLabel("Transaction Amount:");
@@ -223,28 +223,49 @@ public class ModernBankGUI extends JFrame {
     }
 
     private void redirectSystemStreams() {
+        PrintStream previousOut = System.out; 
+
         OutputStream out = new OutputStream() {
-            public void write(int b) { SwingUtilities.invokeLater(() -> { txtConsole.append(String.valueOf((char) b)); txtConsole.setCaretPosition(txtConsole.getDocument().getLength()); }); }
-        }; System.setOut(new PrintStream(out, true));
+            @Override
+            public void write(int b) {
+                try { previousOut.write(b); } catch (Exception e) {} 
+                SwingUtilities.invokeLater(() -> {
+                    txtConsole.append(String.valueOf((char) b));
+                    txtConsole.setCaretPosition(txtConsole.getDocument().getLength());
+                });
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) {
+                try { previousOut.write(b, off, len); } catch (Exception e) {} 
+                String text = new String(b, off, len);
+                SwingUtilities.invokeLater(() -> {
+                    txtConsole.append(text);
+                    txtConsole.setCaretPosition(txtConsole.getDocument().getLength());
+                });
+            }
+        };
+
+        System.setOut(new PrintStream(out, true)); 
     }
 
     // --- UI Styling Helpers ---
     private JButton createStyledButton(String text, Color bgColor) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 18)); // Big Font
+        button.setFont(new Font("Segoe UI", Font.BOLD, 18)); 
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(200, 55)); // Thick, tall button
+        button.setPreferredSize(new Dimension(200, 55)); 
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
     }
 
     private JTextField createStyledTextField() {
         JTextField field = new JTextField();
-        field.setFont(new Font("Segoe UI", Font.PLAIN, 20)); // Large typing font
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 20)); 
         field.setHorizontalAlignment(JTextField.CENTER);
-        field.setPreferredSize(new Dimension(250, 45)); // Thick input box
+        field.setPreferredSize(new Dimension(250, 45)); 
         return field;
     }
 }

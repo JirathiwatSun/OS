@@ -51,8 +51,8 @@ public class BankSystemLauncher {
             employeeGUI = new EmployeePortalGUI();
 
             // Position them side by side on your screen
-            customerGUI.setLocation(100, 100);
-            employeeGUI.setLocation(880, 100);
+            customerGUI.setLocation(50, 50);
+            employeeGUI.setLocation(880, 50);
 
             customerGUI.setVisible(true);
             employeeGUI.setVisible(true);
@@ -69,7 +69,6 @@ public class BankSystemLauncher {
     }
 
     // --- SYNCHRONIZATION TRIGGER ---
-    // When one GUI does something, it calls this to update the other GUI's labels
     public static void updateAllScreens() {
         if (customerGUI != null) customerGUI.refreshData();
         if (employeeGUI != null) employeeGUI.refreshData();

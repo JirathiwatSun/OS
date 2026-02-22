@@ -20,7 +20,7 @@ public class EmployeePortalGUI extends JFrame {
         comboCustomerAccounts = new JComboBox<>();
 
         setTitle("Bank Employee Portal");
-        setSize(800, 750); // Increased Window Size
+        setSize(800, 750); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
         getContentPane().setBackground(new Color(244, 246, 249));
@@ -93,7 +93,7 @@ public class EmployeePortalGUI extends JFrame {
         panel.setBackground(new Color(244, 246, 249));
         panel.setBorder(BorderFactory.createTitledBorder(new EmptyBorder(10, 10, 10, 10), "Customer Management Controls"));
         GridBagConstraints gbc = new GridBagConstraints(); 
-        gbc.insets = new Insets(15, 15, 15, 15); // Large Padding
+        gbc.insets = new Insets(15, 15, 15, 15); 
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
         JLabel lblTarget = new JLabel("Target Account:"); lblTarget.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -151,27 +151,48 @@ public class EmployeePortalGUI extends JFrame {
     }
 
     private void redirectSystemStreams() {
+        PrintStream previousOut = System.out; 
+
         OutputStream out = new OutputStream() {
-            public void write(int b) { SwingUtilities.invokeLater(() -> { txtConsole.append(String.valueOf((char) b)); txtConsole.setCaretPosition(txtConsole.getDocument().getLength()); }); }
-        }; System.setOut(new PrintStream(out, true));
+            @Override
+            public void write(int b) {
+                try { previousOut.write(b); } catch (Exception e) {} 
+                SwingUtilities.invokeLater(() -> {
+                    txtConsole.append(String.valueOf((char) b));
+                    txtConsole.setCaretPosition(txtConsole.getDocument().getLength());
+                });
+            }
+
+            @Override
+            public void write(byte[] b, int off, int len) {
+                try { previousOut.write(b, off, len); } catch (Exception e) {} 
+                String text = new String(b, off, len);
+                SwingUtilities.invokeLater(() -> {
+                    txtConsole.append(text);
+                    txtConsole.setCaretPosition(txtConsole.getDocument().getLength());
+                });
+            }
+        };
+
+        System.setOut(new PrintStream(out, true)); 
     }
 
     // --- UI Styling Helpers ---
     private JButton createStyledButton(String text, Color bgColor) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 16)); // Big Font
+        button.setFont(new Font("Segoe UI", Font.BOLD, 16)); 
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
         button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(180, 50)); // Thick button
+        button.setPreferredSize(new Dimension(180, 50)); 
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
     }
 
     private JTextField createStyledTextField() {
         JTextField field = new JTextField();
-        field.setFont(new Font("Segoe UI", Font.PLAIN, 20)); // Large typing font
-        field.setPreferredSize(new Dimension(200, 45)); // Thick input box
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 20)); 
+        field.setPreferredSize(new Dimension(200, 45)); 
         return field;
     }
 }
